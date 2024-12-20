@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 export const hashPassword= async(Password)=>{
-    return await bcrypt.hash(Password,8);
+    return await bcrypt.hashSync(Password,8);
 }
 
 export const sendServerError=(res,message)=>{

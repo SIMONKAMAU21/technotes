@@ -1,8 +1,7 @@
-import bcrypt from "bcrypt";
 import generateToken from "../utils/generateToken.js";
 import User from "../model/userModal.js";
 import { hashPassword, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError } from "../helpers/helperFunctions.js";
-  
+import bcrypt from 'bcryptjs'
   // Controller to add a new user
   export const addUser = async (req, res) => {
     const { name, email, password, role, phone, address, dateOfBirth, gender } =
@@ -45,7 +44,7 @@ import { hashPassword, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFo
         return sendNotFound(res, "User not found");
       }
       // Compare the provided password with the hashed password
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      const passwordMatch = await bcrypt.compareSync(password, user.password);
       if (!passwordMatch) {
         return sendBadRequest(res, "Invalid credentials");
       }
