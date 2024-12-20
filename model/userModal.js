@@ -6,12 +6,11 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { 
     type: String, 
-    enum: ['Admin', 'Doctor', 'Nurse', 'Receptionist', 'Patient'], 
+    enum: ['admin', 'teacher', 'parent', 'student'], 
     required: true 
   },
   phone: { type: String },
   address: { type: String },
-  dateOfBirth: { type: Date },
   gender: { type: String, enum: ['Male', 'Female', 'Other'] },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }

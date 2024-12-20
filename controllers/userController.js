@@ -2,16 +2,16 @@ import generateToken from "../utils/generateToken.js";
 import User from "../model/userModal.js";
 import { hashPassword, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError } from "../helpers/helperFunctions.js";
 import bcrypt from 'bcryptjs'
-  // Controller to add a new user
-  export const addUser = async (req, res) => {
-    const { name, email, password, role, phone, address, dateOfBirth, gender } =
+
+export const addUser = async (req, res) => {
+    const { name, email, password, role, phone, address, gender } =
       req.body;
-  
     try {
-      const userExists = await User.findOne({ email });
+      const userExists = await User.findOne({ email }).lean().exec();
       if (userExists) {
         return sendBadRequest(res, "User already exists");
       }
+      
       const hashedPassword = await hashPassword(password);
   
       const user = new User({
@@ -21,7 +21,6 @@ import bcrypt from 'bcryptjs'
         role,
         phone,
         address,
-        dateOfBirth,
         gender,
       });
   
@@ -97,8 +96,7 @@ import bcrypt from 'bcryptjs'
   
     export const getUserById = async(req,res)=>{
       try {
-        const user = await User.findById(req.params.id)
-        // .populate("")
+        const user = await User.findById(req.params.id).select('-password')
         if (user) {
           res.status(200).send(user)
         } else {

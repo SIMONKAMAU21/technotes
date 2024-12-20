@@ -1,0 +1,21 @@
+
+POST http://localhost:8000/api/student/add
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU4NDI4ZTA4OThkNzBhZjMxYWFlMSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczNDcyMTQ5OCwiZXhwIjoxNzM0NzI4Njk4fQ.GxKnGr3nquJ6qx7kp_E6Rp6xHBBi8KD5oQ-m5j3NLFg
+
+{
+  "userId": "6765d8ed96bf88401619b634",
+  "classId": "6765d93596bf88401619b63f",
+  "parentId": "6765d90196bf88401619b637",
+  "dob": "2024-12-20T20:53:09.889Z",
+  "address": "Thika",
+  "enrollmentDate": ""
+}
+
+###
+GET http://localhost:8000/api/students
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjI4MjA2MywiZXhwIjoxNzMyMjg5MjYzfQ.PypO9T8ifSmkKo4zazK5mvSYW2EzI1Xhotd0APr2nj0
+
+###
+DELETE http://localhost:8000/api/student/6765c146eab0cf137fd94db4
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjE4Mjg3OCwiZXhwIjoxNzMyMTkwMDc4fQ.1oJy1Ljuen7mwQO0yffaJNL9WSAzfr599uywg9Z1Hss

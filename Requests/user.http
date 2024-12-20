@@ -4,19 +4,18 @@ GET http://localhost:8000/
 GET http://localhost:8000/api/users
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjI4MjA2MywiZXhwIjoxNzMyMjg5MjYzfQ.PypO9T8ifSmkKo4zazK5mvSYW2EzI1Xhotd0APr2nj0
 
-### registering a user
+### registering a user 
 POST http://localhost:8000/api/users/add
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTcyNTcxNDA0OCwiZXhwIjoxNzI1NzIxMjQ4fQ.Ls8o-D3kX-Gr1RDw2BiNmcpFjF8-hv5V2zdL01DYLaY
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU4NDI4ZTA4OThkNzBhZjMxYWFlMSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczNDcyMTQ5OCwiZXhwIjoxNzM0NzI4Njk4fQ.GxKnGr3nquJ6qx7kp_E6Rp6xHBBi8KD5oQ-m5j3NLFg
 
 {
   "name": "simon Kamau",
-  "email": "simon22@gmail.com",
+  "email": "admin24@gmail.com",
   "password": "demo123",
-  "role": "Admin",
+  "role": "admin",
   "phone": "0787245156",
   "address": "Thika",
-  "dateOfBirth": "1980-01-03",
   "gender": "Male"
 }
 ### login
@@ -28,7 +27,7 @@ Content-Type: application/json
   "password": "demo123"
 }
 ### delete a user
-DELETE http://localhost:8000/api/users/66db6c10ce2f056981ad1ad0
+DELETE http://localhost:8000/api/users/6765c146eab0cf137fd94db4
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjE4Mjg3OCwiZXhwIjoxNzMyMTkwMDc4fQ.1oJy1Ljuen7mwQO0yffaJNL9WSAzfr599uywg9Z1Hss
 
 ###

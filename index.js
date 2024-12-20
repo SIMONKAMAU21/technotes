@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import { connectDb } from "./config/db.js";
 import { allowedOrigins } from "./config/allowedOrigins.js";
 import userRouter from "./api/userRoutes.js";
+import classRouter from "./api/classRoutes.js";
+import studentRouter from "./api/studentRoutes.js";
 
 
 dotenv.config();
@@ -22,8 +24,8 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api', userRouter);
-// app.use('/api',doctorRouter);
-// app.use('/api',departmentRouter);
+app.use('/api',classRouter);
+app.use('/api',studentRouter);
 // app.use("/api",patientRouter);
 // app.use('/api',medicalRouter);
 // app.use('/api',treatmentRouter);
