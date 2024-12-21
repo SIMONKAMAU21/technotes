@@ -1,5 +1,5 @@
 
-import { sendBadRequest, sendCreated, sendNotFound } from "../helpers/helperFunctions.js";
+import { sendBadRequest, sendCreated, sendNotFound, sendServerError } from "../helpers/helperFunctions.js";
 import Student from "../model/studentModal.js";
 import User from "../model/userModal.js";
 
@@ -60,7 +60,7 @@ export const deleteStudent = async (req, res) => {
     
   export const getAllStudents = async (req, res) => {
     try {
-      const stdents = await Student.find({}).sort({name:-1});
+      const stdents = await Student.find({}).populate('userId','name').populate('parentId','name').populate('classId','name').sort({name:-1});
       
       if (!stdents || stdents.length === 0) {
         return sendNotFound(res, "No stdents found");
