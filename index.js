@@ -17,11 +17,17 @@ dotenv.config();
 connectDb().catch(console.dir);
 // connectDb()
 const app = express();
-app.use(
-  cors({
-    origin: allowedOrigins,
-  })
-);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+app.use(cors(corsOptions))
 app.use(express.json())
 
 app.get("/", (req, res) => {
