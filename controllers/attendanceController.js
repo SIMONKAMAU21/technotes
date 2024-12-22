@@ -2,7 +2,6 @@ import { sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServe
 import Attendance from "../model/attendanceModal.js";
 import Class from "../model/classModal.js";
 import Student from "../model/studentModal.js";
-import Subject from "../model/subjectModal.js";
 
 export const addAttedance = async (req, res) => {
     const { date, classId, studentId, status } = req.body;
@@ -39,7 +38,7 @@ export const addAttedance = async (req, res) => {
     
   export const getAllAttendance = async (req, res) => {
     try {
-      const attendance = await Attendance.find({}).sort({name:-1});
+      const attendance = await Attendance.find({}).populate('classId','name').populate('studentId','name').sort({name:-1});
       
       if (!attendance || attendance.length === 0) {
         return sendNotFound(res, "No Attendance found");

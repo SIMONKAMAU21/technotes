@@ -68,7 +68,7 @@ export const getAllfees = async (req, res) => {
 
 export const getfeeById = async (req, res) => {
     try {
-        const fee = await Fee.findById(req.params.id)
+        const fee = await Fee.findById(req.params.id).populate('studentId','name')
         if (fee) {
             res.status(200).send(fee)
         } else {

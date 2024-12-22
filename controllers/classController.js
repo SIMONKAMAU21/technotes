@@ -43,7 +43,7 @@ export const deleteClass = async (req, res) => {
     
   export const getAllClasses = async (req, res) => {
     try {
-      const classes = await Class.find({}).sort({name:-1});
+      const classes = await Class.find({}).populate('teacherId','name').sort({name:-1});
       
       if (!classes || classes.length === 0) {
         return sendNotFound(res, "No classes found");
