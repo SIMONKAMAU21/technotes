@@ -7,7 +7,7 @@ export const checkAdmin = (req, res, next) => {
         if (!req.user) {
             return forbidden(res, "Not authorized")
         }
-        if (req.user?.role !== 'Admin') {
+        if (req.user?.role !== 'admin') {
             return forbidden(res, "Access denied")
         }
         return next()

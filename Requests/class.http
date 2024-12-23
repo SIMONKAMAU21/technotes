@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU4NDI4ZTA4OThkNzBhZjMxYWFlMSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczNDcyMTQ5OCwiZXhwIjoxNzM0NzI4Njk4fQ.GxKnGr3nquJ6qx7kp_E6Rp6xHBBi8KD5oQ-m5j3NLFg
 
 {
-  "name": "simon Kamau",
+  "name": "form 1",
   "teacherId": "6765d1bf82e3ef2f0429aa1d"
  
 }

@@ -7,13 +7,13 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2Fl
 ### registering a user 
 POST http://localhost:8000/api/users/add
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU4NDI4ZTA4OThkNzBhZjMxYWFlMSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczNDcyMTQ5OCwiZXhwIjoxNzM0NzI4Njk4fQ.GxKnGr3nquJ6qx7kp_E6Rp6xHBBi8KD5oQ-m5j3NLFg
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjVkOTFhOTZiZjg4NDAxNjE5YjYzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNDk0ODEzOCwiZXhwIjoxNzM0OTU1MzM4fQ.0w9GrMW2l4krIixSRnMyvtOtj1SbKmHq_ry8KOgC1Mk
 
 {
-  "name": "simon Kamau",
+  "name": "peninah gatuma",
   "email": "admin24@gmail.com",
   "password": "demo123",
-  "role": "admin",
+  "role": "student",
   "phone": "0787245156",
   "address": "Thika",
   "gender": "Male"
@@ -23,7 +23,7 @@ POST http://localhost:8000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "simon22@gmail.com",
+  "email": "admin24@gmail.com",
   "password": "demo123"
 }
 ### delete a user
