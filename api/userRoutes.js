@@ -5,7 +5,7 @@ import { Auth } from '../middleware/Auth.js';
 
 const userRouter =Router();
 
-userRouter.post('/users/add',Auth, checkAdmin, addUser);
+userRouter.post('/users/add', addUser);
 userRouter.post('/users/login',login);
 userRouter.delete('/users/:id',deleteUser);
 userRouter.get('/users',getAllUsers);

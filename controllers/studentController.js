@@ -60,14 +60,15 @@ export const deleteStudent = async (req, res) => {
     
   export const getAllStudents = async (req, res) => {
     try {
-      const stdents = await Student.find({}).populate('userId','name').populate('parentId','name').populate('classId','name').sort({name:-1});
-      
-      if (!stdents || stdents.length === 0) {
-        return sendNotFound(res, "No stdents found");
+      const students = await Student.find({}).populate('userId','name').populate('parentId','name').populate('classId','name').sort({name:-1});
+      const filteredData = students.filter(student => student.user)
+      if (!filteredData || filteredData.length === 0) {
+        return sendNotFound(res, "No students found");
       } else {
-        return res.status(200).json(stdents);
+        return res.status(200).json(filteredData);
       }
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ message: "Server error" });
     }
   };

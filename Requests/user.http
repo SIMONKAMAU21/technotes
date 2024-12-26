@@ -13,7 +13,7 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjVkOTFhOTZi
   "name": "peninah gatuma",
   "email": "admin24@gmail.com",
   "password": "demo123",
-  "role": "student",
+  "role": "admin",
   "phone": "0787245156",
   "address": "Thika",
   "gender": "Male"
@@ -27,7 +27,7 @@ Content-Type: application/json
   "password": "demo123"
 }
 ### delete a user
-DELETE http://localhost:8000/api/users/6765c146eab0cf137fd94db4
+DELETE http://localhost:8000/api/users/67694557b9f7b22fc3c6d732
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjE4Mjg3OCwiZXhwIjoxNzMyMTkwMDc4fQ.1oJy1Ljuen7mwQO0yffaJNL9WSAzfr599uywg9Z1Hss
 
 ###
