@@ -60,15 +60,27 @@ export const deleteStudent = async (req, res) => {
     
   export const getAllStudents = async (req, res) => {
     try {
-      const students = await Student.find({}).populate('userId','name').populate('parentId','name').populate('classId','name').sort({name:-1});
-      const filteredData = students.filter(student => student.user)
+      const students = await Student.find({})
+        .populate('userId', 'name')
+        .populate('parentId', 'name')
+        .populate('classId', 'name')
+        .sort({ name: -1 });
+  
+      // Filter out students where userId or parentId does not exist or is incomplete
+      const filteredData = students.filter(student => {
+        const isUserValid = student.userId; // Ensure userId is populated
+        const isParentValid = !student.parentId || student.parentId.name; // Ensure parentId has a valid name or is null
+        return isUserValid && isParentValid;
+      });
+  
       if (!filteredData || filteredData.length === 0) {
         return sendNotFound(res, "No students found");
       } else {
         return res.status(200).json(filteredData);
       }
     } catch (error) {
-      console.log(error)
+      console.error(error);
       return res.status(500).json({ message: "Server error" });
     }
   };
+  
