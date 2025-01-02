@@ -13,7 +13,6 @@ export const addUser = async (req, res) => {
       }
       
       const hashedPassword = await hashPassword(password);
-  
       const user = new User({
         name,
         email,
