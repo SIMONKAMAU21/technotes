@@ -63,3 +63,56 @@ export const getAllClasses = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const updateClass = async (req, res) => {
+  const { id } = req.params; // Class ID
+  const { name, teacherId } = req.body; // Updated class data
+
+  try {
+    // Check if the class exists
+    const existingClass = await Class.findById(id).exec();
+    if (!existingClass) {
+      return sendNotFound(res, "Class not found");
+    }
+
+    // If a new name is provided, check for duplicate class names
+    if (name && name !== existingClass.name) {
+      const classNameCheck = await Class.findOne({ name }).lean().exec();
+      if (classNameCheck) {
+        return sendBadRequest(res, "A class with the same name already exists");
+      }
+      existingClass.name = name;
+    }
+
+    // If a new teacher is provided, validate the teacher ID
+    if (teacherId && teacherId !== existingClass.teacherId.toString()) {
+      const user = await User.findById(teacherId).exec();
+      if (!user) {
+        return sendNotFound(res, "Teacher not found");
+      }
+
+      if (user.role !== "teacher") {
+        return sendBadRequest(res, "User is not a teacher");
+      }
+
+      // Check if the new teacher is already assigned to another class
+      const teacherCheck = await Class.findOne({ teacherId }).lean().exec();
+      if (teacherCheck && teacherCheck._id.toString() !== id) {
+        return sendBadRequest(res, "Teacher is already assigned to another class");
+      }
+
+      existingClass.teacherId = teacherId;
+    }
+
+    // Save the updated class
+    const updatedClass = await existingClass.save();
+
+    res.status(200).json({
+      message: "Class updated successfully",
+      class: updatedClass,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
