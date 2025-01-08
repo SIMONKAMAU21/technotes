@@ -12,7 +12,6 @@ export const addClass = async (req, res) => {
 
     }
     const teacherCheck = await Class.findOne({teacherId }).lean().exec()
-    console.log('first', teacherCheck)
     if (teacherCheck) {
       return sendBadRequest(res, "Teacher is already assigned to another class")
     }

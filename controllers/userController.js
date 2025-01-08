@@ -106,4 +106,41 @@ export const addUser = async (req, res) => {
       }
     }
   
+    export const updateUser = async (req, res) => {
+      const { id } = req.params; // Get the user ID from the request parameters
+      const { name, email, role, phone, address, gender } = req.body; // Destructure updated fields from the request body
+    
+      try {
+        // Check if the user exists
+        const user = await User.findById(id).exec();
+        if (!user) {
+          return sendNotFound('User not found');
+        }
+    
+        // Update fields only if they are provided
+        if (name) user.name = name;
+        if (email) {
+          const emailExists = await User.findOne({ email, _id: { $ne: id } }).exec();
+          if (emailExists) {
+            return sendBadRequest("Email already in use")
+          }
+          user.email = email;
+        }
+        if (role) user.role = role;
+        if (phone) user.phone = phone;
+        if (address) user.address = address;
+        if (gender) user.gender = gender;
+    
+        // Save the updated user to the database
+        const updatedUser = await user.save();
+    
+        res.status(200).json({
+          message: "User updated successfully",
+          user: updatedUser,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+      }
+    };
     

@@ -34,3 +34,19 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2Fl
 GET http://localhost:8000/api/users/66dc47c8caee253747e06a15
 Content-Type: application/json
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTcyNTcxNDA0OCwiZXhwIjoxNzI1NzIxMjQ4fQ.Ls8o-D3kX-Gr1RDw2BiNmcpFjF8-hv5V2zdL01DYLaY
+
+
+### registering a user 
+PUT  http://localhost:8000/api/user/67705e5fbec45abffb2ab13d
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjVkOTFhOTZiZjg4NDAxNjE5YjYzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNDk0ODEzOCwiZXhwIjoxNzM0OTU1MzM4fQ.0w9GrMW2l4krIixSRnMyvtOtj1SbKmHq_ry8KOgC1Mk
+
+{
+   "name": "neville oronni",
+    "email": "student24@gmail.com",
+    "password": "$2a$08$E9uNX3AN8T2bWV3h1v6XZ.WbsmaWoM0kY0724Ulxa5VEPd6pOVWE6",
+    "role": "student",
+    "phone": "0759717794",
+    "address": "324",
+    "gender": "Male"
+}
