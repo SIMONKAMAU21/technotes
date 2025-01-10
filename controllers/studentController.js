@@ -84,3 +84,59 @@ export const deleteStudent = async (req, res) => {
     }
   };
   
+
+  export const updateStudent = async (req, res) => {
+    const { id } = req.params; // Student ID
+    const { userId, parentId,classId, dob, address, enrollmentDate } = req.body; // Updated student data
+  
+    try {
+      // Check if the student exists
+      const existingStudent = await Student.findById(id).exec();
+      if (!existingStudent) {
+        return sendNotFound(res, "Student not found");
+      }
+  
+      // Validate if the new userId belongs to a valid student
+      if (userId && userId !== existingStudent.userId.toString()) {
+        const user = await User.findById(userId).exec();
+        if (!user) {
+          return sendNotFound(res, "User not found");
+        }
+        if (user.role !== "student") {
+          return sendBadRequest(res, "User is not a student");
+        }
+  
+        existingStudent.userId = userId;
+      }
+  
+      // Update parentId if provided
+      if (parentId) {
+        const parent = await User.findById(parentId).exec();
+        if (!parent) {
+          return sendNotFound(res, "Parent not found");
+        }
+        if (parent.role !== "parent") {
+          return sendBadRequest(res, "User is not a parent");
+        }
+        existingStudent.parentId = parentId;
+      }
+  
+      // Update other fields
+      if (dob) existingStudent.dob = dob;
+      if (address) existingStudent.address = address;
+      if (classId) existingStudent.classId = classId;
+      if (enrollmentDate) existingStudent.enrollmentDate = enrollmentDate;
+  
+      // Save the updated student
+      const updatedStudent = await existingStudent.save();
+  
+      res.status(200).json({
+        message: "Student updated successfully",
+        student: updatedStudent,
+      });
+    } catch (error) {
+      console.error(error);
+      sendServerError(res,"server error")
+    }
+  };
+  
