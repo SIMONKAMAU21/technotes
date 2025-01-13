@@ -1,5 +1,5 @@
 
-import { sendBadRequest, sendCreated, sendNotFound, sendServerError } from "../helpers/helperFunctions.js";
+import { sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError } from "../helpers/helperFunctions.js";
 import Student from "../model/studentModal.js";
 import User from "../model/userModal.js";
 

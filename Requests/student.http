@@ -17,7 +17,7 @@ GET http://localhost:8000/api/students
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjI4MjA2MywiZXhwIjoxNzMyMjg5MjYzfQ.PypO9T8ifSmkKo4zazK5mvSYW2EzI1Xhotd0APr2nj0
 
 ###
-DELETE http://localhost:8000/api/student/6765c146eab0cf137fd94db4
+DELETE http://localhost:8000/api/student/6784c047b32cc4559043f77b
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjE4Mjg3OCwiZXhwIjoxNzMyMTkwMDc4fQ.1oJy1Ljuen7mwQO0yffaJNL9WSAzfr599uywg9Z1Hss
 
 ###
