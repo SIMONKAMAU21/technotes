@@ -4,9 +4,9 @@ Content-Type: application/json
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU4NDI4ZTA4OThkNzBhZjMxYWFlMSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczNDcyMTQ5OCwiZXhwIjoxNzM0NzI4Njk4fQ.GxKnGr3nquJ6qx7kp_E6Rp6xHBBi8KD5oQ-m5j3NLFg
 
 {
-  "name": "mathematics",
-  "classId": "6765d93596bf88401619b63f",
-  "teacherId": "6765d1bf82e3ef2f0429aa1d",
+  "name": "Kiswahili",
+  "classId": "6781257718cc29ca5b02973e",
+  "teacherId": "677e89366c5753b79f04c6bd",
   "createdAt": ""
 
 }
@@ -16,5 +16,18 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2Fl
 
 
 ### 
-DELETE http://localhost:8000/api/subject/676697d18b0e53190ffd64fd
+DELETE http://localhost:8000/api/subject/67669b17db34f1b2744be268
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjE4Mjg3OCwiZXhwIjoxNzMyMTkwMDc4fQ.1oJy1Ljuen7mwQO0yffaJNL9WSAzfr599uywg9Z1Hss
+
+###
+PUT http://localhost:8000/api/subject/6784c4acd8882d77e7f724fa
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU4NDI4ZTA4OThkNzBhZjMxYWFlMSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczNDcyMTQ5OCwiZXhwIjoxNzM0NzI4Njk4fQ.GxKnGr3nquJ6qx7kp_E6Rp6xHBBi8KD5oQ-m5j3NLFg
+
+{
+  "name": "Kiswahilii",
+  "classId": "6781257718cc29ca5b02973e",
+  "teacherId": "677e89366c5753b79f04c6bd",
+  "createdAt": ""
+
+}

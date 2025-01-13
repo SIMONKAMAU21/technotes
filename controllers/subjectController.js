@@ -10,7 +10,7 @@ export const addSubject = async (req, res) => {
     // Check if the user exists and fetch their data
     const user = await User.findOne({ _id: teacherId }).lean().exec();
     if (!user) {
-      return sendNotFound(res, "User not found");
+      return sendNotFound(res, "Teacher not found");
     }
     // Check if the user is a student
     if (user.role !== "teacher") {
@@ -49,8 +49,8 @@ export const addSubject = async (req, res) => {
 export const getAllSubjects = async (req, res) => {
   try {
     const subject = await Subject.find({})
-    // .populate('teacherId', 'name')
-    // .populate('classId', 'name')
+    .populate('teacherId', 'name')
+    .populate('classId', 'name')
     .sort({ name: -1 });
 
     if (!subject || subject.length === 0) {
@@ -76,5 +76,41 @@ export const deleteSubject = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const updateSubject = async (req, res) => {
+  const { id } = req.params; // Get the user ID from the request parameters
+  const { name, classId, teacherId, } = req.body; // Destructure updated fields from the request body
+
+  try {
+    // Check if the user exists
+    const subject = await Subject.findById(id).exec();
+    if (!subject) {
+      return sendNotFound('subject not found');
+    }
+
+    // Update fields only if they are provided
+    if (name) subject.name = name;
+    if (classId) {
+      const classIdExists = await Class.findOne({ classId, _id: { $ne: id } }).exec();
+      if (classIdExists) {
+        return sendBadRequest("classId already in use")
+      }
+      subject.classId = classId;
+    }
+    if (teacherId) subject.teacherId = teacherId;
+
+    // Save the updated user to the database
+    const updatedUser = await subject.save();
+
+    res.status(200).json({
+      message: "subject updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error(error);
+    sendServerError(res,"server error")
   }
 };
