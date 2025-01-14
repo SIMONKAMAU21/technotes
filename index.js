@@ -34,6 +34,15 @@ app.get("/", (req, res) => {
   res.send(`helth check  port :${PORT} is running.... smile😄`);
 });
 
+app.post('/api/slack/events',(req,res)=>{
+  const event = req.body
+  if(event.type === "url_verification"){
+return res.status(200).send(event.challenge)
+  }
+  console.log('slack event', event)
+  res.status(200).send("event recieved")
+})
+
 app.use('/api', userRouter);
 app.use('/api',classRouter);
 app.use('/api',studentRouter);
