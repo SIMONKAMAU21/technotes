@@ -2,12 +2,12 @@
 GET http://localhost:8000/
 ###
 GET http://localhost:8000/api/users
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjI4MjA2MywiZXhwIjoxNzMyMjg5MjYzfQ.PypO9T8ifSmkKo4zazK5mvSYW2EzI1Xhotd0APr2nj0
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmRiMzRhNjk3MjQyZGViNzMwOGRhOSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODY2NzQ3MCwiZXhwIjoxNzM4Njc0NjcwfQ.Vamh3Tf_voiCWk-8xlagSq3loI2ChEHfhi7vzyLRNYE
 
 ### registering a user 
 POST http://localhost:8000/api/users/add
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjVkOTFhOTZiZjg4NDAxNjE5YjYzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNDk0ODEzOCwiZXhwIjoxNzM0OTU1MzM4fQ.0w9GrMW2l4krIixSRnMyvtOtj1SbKmHq_ry8KOgC1Mk
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmRiMzRhNjk3MjQyZGViNzMwOGRhOSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODY2NzQ3MCwiZXhwIjoxNzM4Njc0NjcwfQ.Vamh3Tf_voiCWk-8xlagSq3loI2ChEHfhi7vzyLRNYE
 
 {
   "name": "peninah simon",
