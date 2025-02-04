@@ -10,14 +10,15 @@ Content-Type: application/json
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjVkOTFhOTZiZjg4NDAxNjE5YjYzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNDk0ODEzOCwiZXhwIjoxNzM0OTU1MzM4fQ.0w9GrMW2l4krIixSRnMyvtOtj1SbKmHq_ry8KOgC1Mk
 
 {
-  "name": "peninah gatuma",
-  "email": "admin24@gmail.com",
+  "name": "peninah simon",
+  "email": "simogatuma34@gmail.com",
   "password": "demo123",
   "role": "admin",
-  "phone": "0787245156",
+  "phone": "+254759717759",
   "address": "Thika",
   "gender": "Male"
 }
+
 ### login
 POST http://localhost:8000/api/users/login
 Content-Type: application/json
@@ -26,8 +27,9 @@ Content-Type: application/json
   "email": "admin24@gmail.com",
   "password": "demo123"
 }
+
 ### delete a user
-DELETE http://localhost:8000/api/users/67694557b9f7b22fc3c6d732
+DELETE http://localhost:8000/api/users/67875491d9a617541cd0cebe
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjE4Mjg3OCwiZXhwIjoxNzMyMTkwMDc4fQ.1oJy1Ljuen7mwQO0yffaJNL9WSAzfr599uywg9Z1Hss
 
 ###
@@ -50,3 +52,15 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjVkOTFhOTZi
     "address": "324",
     "gender": "Male"
 }
+
+###
+POST http://localhost:8000/api/create/conversation
+Content-Type: application/json
+
+
+{
+  "contactId": "+254759717759",
+  "inboxId": "byVSmzKXrDn5aEV77qpxhuqz", 
+  "messageContent": "Hello! How can I assist you today?"
+}
+

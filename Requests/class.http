@@ -26,3 +26,41 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU4NDI4ZTA4
   "teacherId": "676bf4b6734834603c949556"
  
 }
+
+
+###
+POST http://localhost:8000/api/slack/events
+Content-Type: application/json
+
+{
+  "token": "nZO1yBysCJIIjqXBoD7uW356",
+  "team_id": "T01HM9SDWQ4",
+  "context_team_id": "T01HM9SDWQ4",
+  "api_app_id": "A088F1BKGTX",
+  "event": {
+    "user": "U07T62G2JSD",
+    "type": "message",
+    "ts": "1736841059.367589",
+    "client_msg_id": "0dca8c6e-8e28-42ce-9b9c-1f54688c6cf0",
+    "text": "another test",
+    "team": "T01HM9SDWQ4",
+    "blocks": [],
+    "channel": "D0896NUE9JL",
+    "event_ts": "1736841059.367589",
+    "channel_type": "im"
+  },
+  "type": "event_callback",
+  "event_id": "Ev088FDJST3P",
+  "event_time": 1736841059,
+  "authorizations": [
+    {
+      "enterprise_id": null,
+      "team_id": "T01HM9SDWQ4",
+      "user_id": "U088B9YNZP0",
+      "is_bot": true,
+      "is_enterprise_install": false
+    }
+  ],
+  "is_ext_shared_channel": false,
+  "event_context": "4-eyJldCI6Im1lc3NhZ2UiLCJ0aWQiOiJUMDFITTlTRFdRNCIsImFpZCI6IkEwODhGMUJLR1RYIiwiY2lkIjoiRDA4OTZOVUU5SkwifQ"
+}

@@ -39,103 +39,120 @@ app.get("/", (req, res) => {
 // Chatwoot API credentials
 const CHATWOOT_API_TOKEN = process.env.CHATWOOT_API_TOKEN;
 const CHATWOOT_BASE_URL = process.env.CHATWOOT_BASE_URL;
+const ACCOUNT_ID = process.env.ACCOUNT_ID; // Make sure this is correct
 
 // Function to send a message to Chatwoot
-const sendToChatwoot = async (conversationId, message) => {
-  try {
-    const response = await axios.post(
-      `${CHATWOOT_BASE_URL}/api/v1/accounts/{account_id}/conversations/${conversationId}/messages`,
-      {
-        content: message,
-        message_type: "incoming",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${CHATWOOT_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log("Message sent to Chatwoot:", response.data);
-  } catch (error) {
-    console.error("Error sending message to Chatwoot:", error.response?.data || error.message);
-  }
-};
+// const sendToChatwoot = async (conversationId, message) => {
+//   try {
+//     const response = await axios.post(
+//       `${CHATWOOT_BASE_URL}/api/v1/accounts/${ACCOUNT_ID}/conversations/${conversationId}/messages`,
+//       {
+//         content: message,
+//         message_type: "incoming",
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${CHATWOOT_API_TOKEN}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+//     console.log("Message sent to Chatwoot:", response.data);
+//   } catch (error) {
+//     console.error("Error sending message to Chatwoot:", error.response?.data || error.message);
+//   }
+// };
 
 // Function to fetch or create a Chatwoot conversation
-const fetchOrCreateConversation = async (contactId, inboxId) => {
-  try {
-    // Step 1: Check if a conversation exists for the contact
-    const response = await axios.get(
-      `${CHATWOOT_BASE_URL}/api/v1/accounts/{account_id}/conversations`,
-      {
-        headers: {
-          Authorization: `Bearer ${CHATWOOT_API_TOKEN}`,
-        },
-      }
-    );
+// const fetchOrCreateConversation = async (contactId, inboxId) => {
+//   const payload = {
+//     source_id: contactId,
+//     inbox_id: inboxId,
+//     contact_id: contactId,
+//     additional_attributes: {},
+//     custom_attributes: { priority_conversation_number: 1 },
+//     status: "open",
+//     message: {
+//       content: "Hello! How can I assist you today?",
+//       template_params: {
+//         name: "sample_issue_resolution",
+//         category: "UTILITY",
+//         language: "en_US",
+//         processed_params: { "1": "Chatwoot" },
+//       },
+//     },
+//   };
 
-    const conversation = response.data.conversations.find(
-      (conv) => conv.contact_id === contactId
-    );
+//   try {
+//     console.log("Creating conversation with payload:", payload);
 
-    if (conversation) {
-      return conversation.id; // Return existing conversation ID
-    }
+//     const response = await axios.post(
+//       `${CHATWOOT_BASE_URL}/api/v1/accounts/${ACCOUNT_ID}/conversations`,
+//       payload,
+//       {
+//         headers: {
+//           api_access_token: `T5pFM4hnChzw7hRcr9rXc4R5`, // Use the correct header parameter name
+//           "Content-Type": "application/json", // Ensure JSON content type
+//         },
+//       }
+//     );
 
-    // Step 2: Create a new conversation if one doesn't exist
-    const newConversation = await axios.post(
-      `${CHATWOOT_BASE_URL}/api/v1/accounts/{account_id}/conversations`,
-      {
-        source_id: contactId,
-        inbox_id: inboxId,
-        status: "open",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${CHATWOOT_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+//     console.log("Conversation created successfully:", response.data);
+//     return response.data.id;
+//   } catch (error) {
+//     console.error(
+//       "Error fetching or creating conversation:",
+//       error.response?.data || error.message,
+//       "Payload:",
+//       payload
+//     );
+//     return null;
+//   }
+// };
 
-    return newConversation.data.id; // Return new conversation ID
-  } catch (error) {
-    console.error("Error fetching or creating conversation:", error.response?.data || error.message);
-    return null;
-  }
-};
 
-// Slack event handler
-app.post("/api/slack/events", async (req, res) => {
-  const event = req.body;
 
-  // Slack URL verification
-  if (event.type === "url_verification") {
-    return res.status(200).send(event.challenge);
-  }
 
-  console.log("Slack Event:", event);
 
-  // Handle message events from Slack
-  if (event.event && event.event.type === "message") {
-    const contactId = event.event.user; // Slack user ID
-    const inboxId = "LEjAqysmuaRGAfFjL8sb7euN"; // Replace with the Chatwoot inbox ID
-    const message = event.event.text;
+// // Slack event handler
+// app.post("/api/slack/events", async (req, res) => {
+//   const event = req.body;
 
-    // Fetch or create a Chatwoot conversation
-    const conversationId = await fetchOrCreateConversation(contactId, inboxId);
+//   // Slack URL verification
+//   if (event.type === "url_verification") {
+//     console.log("Slack URL verification received");
+//     return res.status(200).send(event.challenge);
+//   }
 
-    if (conversationId) {
-      // Send the Slack message to Chatwoot
-      await sendToChatwoot(conversationId, message);
-    } else {
-      console.error("Unable to fetch or create a Chatwoot conversation");
-    }
-  }
+//   // Validate Slack event structure
+//   if (!event.event || !event.event.user || !event.event.text) {
+//     console.error("Invalid Slack event structure:", event);
+//     return res.status(400).send("Invalid event");
+//   }
 
-  res.status(200).send("Event received");
-});
+//   console.log("Processing Slack Event:", event);
+
+//   const contactId = event.event.user; // Slack user ID
+//   const inboxId = "LEjAqysmuaRGAfFjL8sb7euN"; // Replace with a valid Chatwoot inbox ID
+//   const message = event.event.text;
+
+//   try {
+//     const conversationId = await fetchOrCreateConversation(contactId, inboxId);
+//     console.log("Chatwoot conversationId:", conversationId);
+
+//     if (conversationId) {
+//       await sendToChatwoot(conversationId, message);
+//       console.log("Message sent to Chatwoot");
+//     } else {
+//       console.error("Failed to create or fetch conversation in Chatwoot");
+//     }
+//   } catch (err) {
+//     console.error("Error handling Slack event:", err.message);
+//   }
+
+//   res.status(200).send("Event processed");
+// });
+
 
 // Route imports
 app.use("/api", userRouter);
