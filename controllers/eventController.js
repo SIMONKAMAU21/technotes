@@ -15,7 +15,7 @@ export const addEvent = async (req, res) => {
         title,
         start: new Date(start),
         end: new Date(end),
-        createdBy: req.user.id,  // Assuming Auth middleware sets req.user
+        createdBy: req.event.id,  // Assuming Auth middleware sets req.event
       });
   
       // Save event to the database
@@ -57,3 +57,34 @@ export const getAllEvents = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
   };
+
+
+  export const updateEvent = async (req, res) => {
+    const { id } = req.params; // Get the event ID from the request parameters
+    const { title, start, end } = req.body; // Destructure updated fields from the request body
+  
+    try {
+      // Check if the event exists
+      const event = await Event.findById(id).exec();
+      if (!event) {
+        return sendNotFound(res, 'event not found');
+      }
+  
+      // Update fields only if they are provided
+      if (title) event.title = title;
+      if (start) event.start = start;
+      if (end) event.end = end;
+  
+      // Save the updated event to the database
+      const updatedevent = await event.save();
+  
+      res.status(200).json({
+        message: "event updated successfully",
+        event: updatedevent,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  };
+  
