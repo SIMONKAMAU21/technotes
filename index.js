@@ -12,6 +12,7 @@ import feeRouter from "./api/feeRoutes.js";
 import gradeRouter from "./api/gradeRoutes.js";
 import messageRouter from "./api/messageRoutes.js";
 import axios from "axios";
+import eventRouter from "./api/eventRoutes.js";
 
 dotenv.config();
 connectDb().catch(console.dir);
@@ -163,6 +164,7 @@ app.use("/api", attendanceRouter);
 app.use("/api", feeRouter);
 app.use("/api", gradeRouter);
 app.use("/api", messageRouter);
+app.use("/api", eventRouter);
 
 // Server configuration
 const PORT = process.env.PORT || 5000;

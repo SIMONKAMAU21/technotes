@@ -1,0 +1,17 @@
+POST http://localhost:8000/api/event/add
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmRiMzRhNjk3MjQyZGViNzMwOGRhOSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJwZW5pbmFoIG11cmluZ2kiLCJpYXQiOjE3Mzg2NzMzNTQsImV4cCI6MTczODY4MDU1NH0.QbbktEK7M2dyWBGypMmPeF7r790PCR4S4bbVqH4lgP8
+
+{
+  "title": "Football Practice",
+  "start": "2025-03-06T14:00:00Z",
+  "end": "2025-03-06T16:00:00Z"
+}
+###
+GET http://localhost:8000/api/events
+
+
+
+###
+DELETE http://localhost:8000/api/event/67a20c618e5ab367311017ba
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjE4Mjg3OCwiZXhwIjoxNzMyMTkwMDc4fQ.1oJy1Ljuen7mwQO0yffaJNL9WSAzfr599uywg9Z1Hss
