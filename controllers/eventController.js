@@ -15,9 +15,9 @@ export const addEvent = async (req, res) => {
         title,
         start: new Date(start),
         end: new Date(end),
-        createdBy: req.event.id,  // Assuming Auth middleware sets req.event
+        createdBy: req.user.id,  // Assuming Auth middleware sets req.event
       });
-  
+  console.log('newEvent', newEvent)
       // Save event to the database
       await newEvent.save();
   

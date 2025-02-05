@@ -1,15 +1,15 @@
 POST http://localhost:8000/api/event/add
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmRiMzRhNjk3MjQyZGViNzMwOGRhOSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJwZW5pbmFoIG11cmluZ2kiLCJpYXQiOjE3Mzg2NzMzNTQsImV4cCI6MTczODY4MDU1NH0.QbbktEK7M2dyWBGypMmPeF7r790PCR4S4bbVqH4lgP8
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmRiMzRhNjk3MjQyZGViNzMwOGRhOSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJwZW5pbmFoIG11cmluZ2kiLCJpYXQiOjE3Mzg3NjQwODYsImV4cCI6MTczODc3MTI4Nn0.9YU8rcv-7ywzHssVnIMP2yLKXMW94CV5_lIlDc_v46w
 
 {
-  "title": "Football Practice",
+  "title": "team lunch",
   "start": "2025-03-06T14:00:00Z",
   "end": "2025-03-06T16:00:00Z"
 }
 ###
 GET http://localhost:8000/api/events
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmRiMzRhNjk3MjQyZGViNzMwOGRhOSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJwZW5pbmFoIG11cmluZ2kiLCJpYXQiOjE3Mzg2OTg3NjgsImV4cCI6MTczODcwNTk2OH0.wSC7n1xi9AgLGjltePPqlWW6F1TTHsErFtDoU299v4U
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmRiMzRhNjk3MjQyZGViNzMwOGRhOSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJwZW5pbmFoIG11cmluZ2kiLCJpYXQiOjE3Mzg3NjQwODYsImV4cCI6MTczODc3MTI4Nn0.9YU8rcv-7ywzHssVnIMP2yLKXMW94CV5_lIlDc_v46w
 
 
 
