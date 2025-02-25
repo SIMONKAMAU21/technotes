@@ -4,12 +4,6 @@ import { hashPassword, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFo
 import bcrypt from 'bcryptjs'
 import axios from "axios";
 
-const account_id = process.env.ACCOUNT_ID
-const inbox_id = process.env.INBOX_ID
-console.log('inbox_id', inbox_id)
-
-console.log('account_id', account_id)
-
 
 export const addUser = async (req, res) => {
   const { name, email, password, role, phone, address, gender } = req.body;

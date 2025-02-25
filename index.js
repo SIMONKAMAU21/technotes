@@ -34,7 +34,7 @@ app.use(express.json());
 
 // Base health check route
 app.get("/", (req, res) => {
-  res.send(`Health check: Server running on port ${PORT}... 😄`);
+  res.redirect(`https://simon-kamau.vercel.app/`);
 });
 
 // Chatwoot API credentials
@@ -170,7 +170,7 @@ app.use("/api", eventRouter);
 // Server configuration
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.warn(`Server is up and running on port 😄: ${PORT}`);
+  // console.warn(`Server is up and running on port 😄: ${PORT}`);
 });
 
 export default app;
