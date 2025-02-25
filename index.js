@@ -38,9 +38,10 @@ app.get("/", (req, res) => {
 });
 
 // Chatwoot API credentials
-const CHATWOOT_API_TOKEN = process.env.CHATWOOT_API_TOKEN;
-const CHATWOOT_BASE_URL = process.env.CHATWOOT_BASE_URL;
-const ACCOUNT_ID = process.env.ACCOUNT_ID; // Make sure this is correct
+// const CHATWOOT_API_TOKEN = process.env.CHATWOOT_API_TOKEN;
+// const CHATWOOT_BASE_URL = process.env.CHATWOOT_BASE_URL;
+// const ACCOUNT_ID = process.env.ACCOUNT_ID;
+ // Make sure this is correct
 
 // Function to send a message to Chatwoot
 // const sendToChatwoot = async (conversationId, message) => {
