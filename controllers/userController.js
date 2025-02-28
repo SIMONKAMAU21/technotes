@@ -1,20 +1,30 @@
 import generateToken from "../utils/generateToken.js";
 import User from "../model/userModal.js";
-import { hashPassword, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError } from "../helpers/helperFunctions.js";
-import bcrypt from 'bcryptjs'
-import axios from "axios";
-
-
+import {
+  hashPassword,
+  sendBadRequest,
+  sendCreated,
+  sendDeleteSuccess,
+  sendNotFound,
+  sendServerError,
+} from "../helpers/helperFunctions.js";
+import bcrypt from "bcryptjs";
+import { sendEmail } from "../middleware/mailer.js";
+import crypto from 'crypto'
+//CRUD
 export const addUser = async (req, res) => {
-  const { name, email, password, role, phone, address, gender } = req.body;
+  const { name, email, role, phone, address, gender } = req.body;
 
   try {
-    const userExists = await User.findOne({ email }).lean().exec();
+    const userExists = await User.findOne({ email, phone }).lean().exec();
     if (userExists) {
       return sendBadRequest(res, "User already exists");
     }
 
-    const hashedPassword = await hashPassword(password);
+    const passcode = crypto.randomBytes(4).toString('hex');
+    console.log("passcode", passcode);
+    const hashedPassword = await hashPassword(passcode);
+
     const user = new User({
       name,
       email,
@@ -27,10 +37,7 @@ export const addUser = async (req, res) => {
 
     // Save user to the database
     await user.save();
-
-    // Create contact in Chatwoot (optional step)
-    await createContactInChatwoot(user);
-
+    sendEmail(email, passcode, "your passcode ");
     // Send a success response
     sendCreated(res, "User created successfully", user);
   } catch (error) {
@@ -53,8 +60,9 @@ export const login = async (req, res) => {
     if (!passwordMatch) {
       return sendBadRequest(res, "Invalid credentials");
     }
+
     // Generate JWT token
-    const token = generateToken(user._id, user.role,user.name);
+    const token = generateToken(user._id, user.role, user.name);
     // Respond with token and user data
     return res.status(200).json({
       message: "Login successful",
@@ -103,7 +111,7 @@ export const getAllUsers = async (req, res) => {
 // Get User By ID - Retrieves a specific user by ID
 export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select('-password');
+    const user = await User.findById(req.params.id).select("-password");
     if (user) {
       res.status(200).send(user);
     } else {
@@ -123,13 +131,16 @@ export const updateUser = async (req, res) => {
     // Check if the user exists
     const user = await User.findById(id).exec();
     if (!user) {
-      return sendNotFound(res, 'User not found');
+      return sendNotFound(res, "User not found");
     }
 
     // Update fields only if they are provided
     if (name) user.name = name;
     if (email) {
-      const emailExists = await User.findOne({ email, _id: { $ne: id } }).exec();
+      const emailExists = await User.findOne({
+        email,
+        _id: { $ne: id },
+      }).exec();
       if (emailExists) {
         return sendBadRequest(res, "Email already in use");
       }
@@ -153,103 +164,30 @@ export const updateUser = async (req, res) => {
   }
 };
 
-// Helper function to create a contact in Chatwoot
-const createContactInChatwoot = async (user) => {
+export const changePassword = async (req, res) => {
   try {
-    const response = await axios.post(
-      `https://app.chatwoot.com/api/v1/accounts/${account_id}/contacts`,
-      {
-        name: user.name,
-        email: user.email,
-        phone_number: user.phone || "",
-      },
-      {
-        headers: {
-          api_access_token: `T5pFM4hnChzw7hRcr9rXc4R5`, 
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log('response', response)
+    const { id } = req.params;
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(id).exec();
+    if (!user) {
+      return sendNotFound(res, "User not found");
+    }
+    const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!passwordMatch) {
+      return sendBadRequest(res, "old password did not match");
+    }
+    if (oldPassword === newPassword) {
+      return sendBadRequest(
+        res,
+        "old password and new password cannot be the same"
+      );
+    }
+    const hashedPassword = await hashPassword(newPassword);
+    user.password = hashedPassword;
+    await user.save();
+    res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
-    console.error("Error creating contact in Chatwoot:", error);
+    console.error(error);
+    sendServerError(res, "Server error");
   }
 };
-
-
-
-// Helper function to create a conversation in Chatwoot
-export const createConversation = async (req, res) => {
-  const { contactId, inboxId, messageContent } = req.body;
-
-  // Validate the required parameters
-  if (!contactId || !inboxId || !messageContent) {
-    return res.status(400).json({ message: "Missing required fields: contactId, inboxId, or messageContent." });
-  }
-
-  const payload = {
-    source_id: "+25459717794", // Unique identifier for the contact
-    inbox_id: "uHGgu78DoWy9V9LSetj596eu", // Chatwoot inbox ID
-    contact_id: contactId, // Chatwoot contact ID, you can modify if needed
-    additional_attributes: {},
-    custom_attributes: {
-      priority_conversation_number: 1, // Example of custom attributes
-    },
-    status: "open",
-    message: {
-      content: messageContent,
-    },
-  }
-  // {
-  //   "source_id": "string",
-  //   "inbox_id": "string",
-  //   "contact_id": "string",
-  //   "additional_attributes": {},
-  //   "custom_attributes": {
-  //     "attribute_key": "attribute_value",
-  //     "priority_conversation_number": 3
-  //   },
-  //   "status": "open",
-  //   "assignee_id": "string",
-  //   "team_id": "string",
-  //   "message": {
-  //     "content": "string",
-  //     "template_params": {
-  //       "name": "sample_issue_resolution",
-  //       "category": "UTILITY",
-  //       "language": "en_US",
-  //       "processed_params": {
-  //         "1": "Chatwoot"
-  //       }
-  //     }
-  //   }
-  // }
-  try {
-    // Make the API call to Chatwoot
-    const response = await axios.post(
-      `https://app.chatwoot.com/api/v1/accounts/${account_id}/conversations`,
-      payload,
-
-      {
-        headers: {
-          api_access_token: "T5pFM4hnChzw7hRcr9rXc4R5",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log('response', response)
-    // Return success response with the conversation ID
-    return res.status(201).json({
-      message: "Conversation created successfully",
-      conversationId: response.data.id,
-    });
-  } catch (error) {
-    // Handle errors and return the appropriate response
-    console.error("Error creating conversation in Chatwoot:", error.response?.data || error.message);
-    return res.status(500).json({ message: "Failed to create conversation", error: error.response?.data || error.message });
-  }
-};
-
-
-
-
