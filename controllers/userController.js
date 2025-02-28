@@ -10,7 +10,8 @@ import {
 } from "../helpers/helperFunctions.js";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "../middleware/mailer.js";
-import crypto from 'crypto'
+import crypto from "crypto";
+import Student from "../model/studentModal.js";
 //CRUD
 export const addUser = async (req, res) => {
   const { name, email, role, phone, address, gender } = req.body;
@@ -21,8 +22,7 @@ export const addUser = async (req, res) => {
       return sendBadRequest(res, "User already exists");
     }
 
-    const passcode = crypto.randomBytes(4).toString('hex');
-    console.log("passcode", passcode);
+    const passcode = crypto.randomBytes(4).toString("hex");
     const hashedPassword = await hashPassword(passcode);
 
     const user = new User({
@@ -34,10 +34,10 @@ export const addUser = async (req, res) => {
       address,
       gender,
     });
-
+    const text = `Welcome! ${name} Your generated password to access your account is: ${passcode}\nPlease log in and change it as soon as possible.`;
     // Save user to the database
     await user.save();
-    sendEmail(email, passcode, "your passcode ");
+    sendEmail(email, "your passcode ", text, false);
     // Send a success response
     sendCreated(res, "User created successfully", user);
   } catch (error) {
@@ -49,12 +49,27 @@ export const addUser = async (req, res) => {
 // Login - Authenticates user and generates JWT token
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, ID } = req.body;
     // Find the user by email
-    const user = await User.findOne({ email });
+    let user;
+    if (ID) {
+      const student = await Student.findOne({ studentId: ID })
+        .populate("userId")
+        .exec();
+      if (!student) {
+        return sendNotFound(res, "Student not found");
+      }
+      user = student.userId;
+    } else {
+      user = await User.findOne({ email }).lean().exec();
+    }
     if (!user) {
       return sendNotFound(res, "User not found");
     }
+     // If the user is a student but didn't provide studentId, return an error
+    //  if (user.role === "student" && !ID) {
+    //   return sendBadRequest(res, "Student ID is required for students");
+    // }
     // Compare the provided password with the hashed password
     const passwordMatch = await bcrypt.compareSync(password, user.password);
     if (!passwordMatch) {

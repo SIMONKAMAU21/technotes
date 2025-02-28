@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export const sendEmail = async (email, passcode, subject) => {
+export const sendEmail = async (email, subject,content,isHtml = false) => {
   const ownEmail = process.env.EMAIL;
   const password = process.env.PASSWORD;
 
@@ -15,7 +15,7 @@ export const sendEmail = async (email, passcode, subject) => {
     from: ownEmail,
     to: email,
     subject: `${subject}`,
-    text: `Welcome! Your generated password to access your account is: ${passcode}\nPlease log in and change it as soon as possible.`,
+    [isHtml ? "html" : "text"]: content, // Dynamically decide whether to use text or HTML
   };
   await transporter.sendMail(mailOptions, function (error, info) {
     if (error) {

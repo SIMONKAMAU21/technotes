@@ -6,6 +6,8 @@ const studentSchema = new mongoose.Schema({
     parentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // For parent
     dob: { type: Date },
     address: { type: String },
+    studentId : { type: String },
+    backupId : { type: String },
     enrollmentDate: { type: Date, default: Date.now },
   });
   
