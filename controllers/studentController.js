@@ -19,7 +19,7 @@ export const addStudent = async (req, res) => {
     if (!user) {
       return sendNotFound(res, "User not found");
     }
-console.log('user', user)
+    console.log("user", user);
     // Check if the user is a student
     if (user.role !== "student") {
       return sendBadRequest(res, "User is not a student");
@@ -34,7 +34,7 @@ console.log('user', user)
     const year = new Date().getFullYear();
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const fullId = `${year}${randomNum}`;
-    
+
     // Create the new student
     const newStudent = new Student({
       userId,
@@ -71,7 +71,7 @@ console.log('user', user)
       `,
       true // This ensures the email is sent as HTML
     );
-    
+
     sendCreated(res, "Student created successfully", newStudent);
   } catch (error) {
     console.error(error);
@@ -172,3 +172,23 @@ export const updateStudent = async (req, res) => {
     sendServerError(res, "server error");
   }
 };
+
+export const getStudentByClassId = async (req, res) => {
+  const classId = req.params.classId;
+  try {
+    const students = await Student.find({ classId })
+      .populate("userId", "name")
+      .populate("parentId", "name")
+      .populate("classId", "name")
+      .lean()
+      .exec();
+
+    if (!students || students.length === 0) {
+      return sendNotFound(res, "No students found");
+    } else {
+      return res.status(200).json(students);
+    }
+  } catch (error) {
+    return sendServerError(res, "Server error");
+  }
+}
