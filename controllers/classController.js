@@ -64,6 +64,20 @@ export const getAllClasses = async (req, res) => {
   }
 };
 
+export const getClassByTeacher = async (req, res) => {
+  const teacherId = req.params.id;
+  try {
+    const classes = await Class.find({ teacherId }).lean().exec();
+    if (classes.length > 0) {
+      res.status(200).send(classes);
+    } else {
+      sendNotFound(res, "No class with the teacher id is found");
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
 export const updateClass = async (req, res) => {
   const { id } = req.params; // Class ID
   const { name, teacherId } = req.body; // Updated class data

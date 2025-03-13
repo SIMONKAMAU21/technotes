@@ -45,11 +45,10 @@ export const addSubject = async (req, res) => {
 };
 
 
-
 export const getAllSubjects = async (req, res) => {
   try {
     const subject = await Subject.find({})
-    .populate('teacherId', 'name')
+    .populate('teacherId', 'name email',)
     .populate('classId', 'name')
     .sort({ name: -1 });
 
@@ -59,10 +58,30 @@ export const getAllSubjects = async (req, res) => {
       return res.status(200).json(subject);
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Server error" });
   }
 };
 
+
+export const getSubjectByTeacher =async (req,res) =>{
+  const teacherId = req.params.id;
+try {
+  const subject = await Subject.find({teacherId: teacherId})
+  .populate('teacherId', 'name email')
+  .populate('classId', 'name')
+  .sort({ name: -1 });
+  if(!subject || subject.length === 0){
+    return sendNotFound(res, "No subject found");
+  }
+  else{
+    return res.status(200).json(subject);
+  }
+
+} catch (error) {
+  return sendServerError(res, "Server error");
+}
+}
 export const deleteSubject = async (req, res) => {
   try {
     const subject = await Subject.findById(req.params.id);
@@ -88,7 +107,7 @@ export const updateSubject = async (req, res) => {
     // Check if the user exists
     const subject = await Subject.findById(id).exec();
     if (!subject) {
-      return sendNotFound('subject not found');
+      return sendNotFound(res,'subject not found');
     }
 
     // Update fields only if they are provided
