@@ -32,7 +32,6 @@ const io = new Server(server,{
 io.on('connection',(socket)=>{
   socket.emit("connected", { message: "You are connected to Socket.io!" });
   socket.on("disconnect",()=>{
-  console.log("User disconnected",socket.id)
 })
 })
 // Configure CORS options
