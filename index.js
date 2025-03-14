@@ -14,6 +14,7 @@ import messageRouter from "./api/messageRoutes.js";
 import eventRouter from "./api/eventRoutes.js";
 import {createServer} from "http"
 import { Server } from "socket.io";
+
 dotenv.config();
 connectDb().catch(console.dir);
 
@@ -39,7 +40,6 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
-      console.log(origin)
     } else {
       callback(new Error("Not allowed by CORS"));
     }
