@@ -14,7 +14,6 @@ import messageRouter from "./api/messageRoutes.js";
 import eventRouter from "./api/eventRoutes.js";
 import {createServer} from "http"
 import { Server } from "socket.io";
-
 dotenv.config();
 connectDb().catch(console.dir);
 
@@ -33,6 +32,7 @@ const io = new Server(server,{
 io.on('connection',(socket)=>{
   socket.emit("connected", { message: "You are connected to Socket.io!" });
   socket.on("disconnect",()=>{
+    
 })
 })
 // Configure CORS options
@@ -56,6 +56,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.redirect(`https://simon-kamau.vercel.app/`);
 });
+
 
 
 
