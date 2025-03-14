@@ -21,7 +21,6 @@ export const addUser = async (req, res) => {
     if (userExists) {
       return sendBadRequest(res, "User already exists");
     }
-
     const passcode = crypto.randomBytes(4).toString("hex");
     const hashedPassword = await hashPassword(passcode);
 
@@ -66,11 +65,7 @@ export const login = async (req, res) => {
     if (!user) {
       return sendNotFound(res, "User not found");
     }
-     // If the user is a student but didn't provide studentId, return an error
-    //  if (user.role === "student" && !ID) {
-    //   return sendBadRequest(res, "Student ID is required for students");
-    // }
-    // Compare the provided password with the hashed password
+ 
     const passwordMatch = await bcrypt.compareSync(password, user.password);
     if (!passwordMatch) {
       return sendBadRequest(res, "Invalid credentials");
@@ -87,6 +82,7 @@ export const login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        photo:user.photo
       },
     });
   } catch (error) {
@@ -141,7 +137,6 @@ export const getUserById = async (req, res) => {
 export const updateUser = async (req, res) => {
   const { id } = req.params; // Get the user ID from the request parameters
   const { name, email, role, phone, address, gender } = req.body; // Destructure updated fields from the request body
-
   try {
     // Check if the user exists
     const user = await User.findById(id).exec();
@@ -204,5 +199,34 @@ export const changePassword = async (req, res) => {
   } catch (error) {
     console.error(error);
     sendServerError(res, "Server error");
+  }
+};
+
+export const uploadProfilePhoto = async (req, res) => {
+  const { id } = req.params; // Get the user ID from params
+
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  try {
+    const user = await User.findById(id).exec();
+    if (!user) {
+      return sendNotFound(res, "User not found");
+    }
+
+    const photoUrl =   user.photo = req.file.path; 
+console.log('photoUrl', photoUrl)
+    const updatedUser = await user.save();
+    res.status(200).json({
+      message: "Profile photo uploaded successfully",
+      user: {
+        ...updatedUser.toObject(),
+        photo: photoUrl, // Full URL to access the image
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return sendServerError(res, "Server error");
   }
 };

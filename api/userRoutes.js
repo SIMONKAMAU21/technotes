@@ -1,7 +1,8 @@
 import {Router} from 'express';
-import { addUser, changePassword, deleteUser, getAllUsers, getUserById, login, updateUser } from '../controllers/userController.js';
+import { addUser, changePassword, deleteUser, getAllUsers, getUserById, login, updateUser, uploadProfilePhoto } from '../controllers/userController.js';
 import { checkAdmin } from '../middleware/checkAdmin.js';
 import { Auth } from '../middleware/Auth.js';
+import { upload } from '../middleware/multer.js';
 
 const userRouter =Router();
 
@@ -13,6 +14,7 @@ userRouter.get('/users/:id',getUserById);
 userRouter.put('/user/:id',Auth,checkAdmin,updateUser)
 userRouter.post('/create/conversation');
 userRouter.post('/user/password/:id',changePassword)
+userRouter.post('/user/:id/upload-photo',upload.single("photo"),uploadProfilePhoto)
 
 
 

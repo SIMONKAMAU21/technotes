@@ -14,7 +14,6 @@ import messageRouter from "./api/messageRoutes.js";
 import eventRouter from "./api/eventRoutes.js";
 import {createServer} from "http"
 import { Server } from "socket.io";
-
 dotenv.config();
 connectDb().catch(console.dir);
 
@@ -33,6 +32,7 @@ const io = new Server(server,{
 io.on('connection',(socket)=>{
   socket.emit("connected", { message: "You are connected to Socket.io!" });
   socket.on("disconnect",()=>{
+    
 })
 })
 // Configure CORS options
@@ -58,6 +58,13 @@ app.get("/", (req, res) => {
 });
 
 
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files properly
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Route imports
 app.use("/api", userRouter);
