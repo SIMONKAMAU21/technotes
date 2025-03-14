@@ -14,6 +14,7 @@ import messageRouter from "./api/messageRoutes.js";
 import eventRouter from "./api/eventRoutes.js";
 import {createServer} from "http"
 import { Server } from "socket.io";
+
 dotenv.config();
 connectDb().catch(console.dir);
 

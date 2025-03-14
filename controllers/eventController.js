@@ -52,7 +52,7 @@ export const getAllEvents = async (req, res) => {
 export const deleteEvent = async (req, res) => {
   const event = await Event.findById(req.params.id);
   if (!event) {
-    sendNotFound(res, "event not found");
+  return sendNotFound(res, "event not found");
   }
   if (event) {
     await event.deleteOne();
