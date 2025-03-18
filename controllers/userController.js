@@ -65,7 +65,7 @@ export const login = async (req, res) => {
     if (!user) {
       return sendNotFound(res, "User not found");
     }
- 
+
     const passwordMatch = await bcrypt.compareSync(password, user.password);
     if (!passwordMatch) {
       return sendBadRequest(res, "Invalid credentials");
@@ -82,7 +82,7 @@ export const login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        photo:user.photo
+        photo: user.photo,
       },
     });
   } catch (error) {
@@ -107,7 +107,7 @@ export const deleteUser = async (req, res) => {
 // Get All Users - Retrieves all users from the database
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({}).sort({ name: -1 });
+    const users = await User.find({}).sort({ createdAt: -1 });
 
     if (!users || users.length === 0) {
       return sendNotFound(res, "No users found");
@@ -215,8 +215,8 @@ export const uploadProfilePhoto = async (req, res) => {
       return sendNotFound(res, "User not found");
     }
 
-    const photoUrl =   user.photo = req.file.path; 
-console.log('photoUrl', photoUrl)
+    const photoUrl = (user.photo = req.file.path);
+    console.log("photoUrl", photoUrl);
     const updatedUser = await user.save();
     res.status(200).json({
       message: "Profile photo uploaded successfully",
