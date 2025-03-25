@@ -122,7 +122,7 @@ export const getAllUsers = async (req, res) => {
 // Get User By ID - Retrieves a specific user by ID
 export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.body.id).select("-password");
     if (user) {
       res.status(200).send(user);
     } else {
@@ -216,7 +216,6 @@ export const uploadProfilePhoto = async (req, res) => {
     }
 
     const photoUrl = (user.photo = req.file.path);
-    console.log("photoUrl", photoUrl);
     const updatedUser = await user.save();
     res.status(200).json({
       message: "Profile photo uploaded successfully",

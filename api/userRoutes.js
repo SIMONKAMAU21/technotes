@@ -10,7 +10,7 @@ userRouter.post('/users/add',Auth,checkAdmin, addUser);
 userRouter.post('/users/login',login);
 userRouter.delete('/users/:id',Auth,checkAdmin,deleteUser);
 userRouter.get('/users',Auth,checkAdmin,getAllUsers);
-userRouter.get('/users/:id',getUserById);
+userRouter.post('/user',getUserById);
 userRouter.put('/user/:id',Auth,checkAdmin,updateUser)
 userRouter.post('/create/conversation');
 userRouter.post('/user/password/:id',changePassword)
