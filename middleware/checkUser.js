@@ -7,7 +7,6 @@ export const checkUser = (req,res,next) =>{
          return forbidden(res,"Not Authorized")
         }
          if(req.user?.role !== "admin" && req.user?.role !== "teacher") {
-            console.log("here")
             return forbidden (res,"Acces Denied")
         }
         return next()

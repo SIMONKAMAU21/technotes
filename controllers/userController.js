@@ -12,6 +12,8 @@ import bcrypt from "bcryptjs";
 import { sendEmail } from "../middleware/mailer.js";
 import crypto from "crypto";
 import Student from "../model/studentModal.js";
+import { io } from "../index.js";
+import { Socket } from "socket.io";
 //CRUD
 export const addUser = async (req, res) => {
   const { name, email, role, phone, address, gender } = req.body;
@@ -35,7 +37,8 @@ export const addUser = async (req, res) => {
     });
     const text = `Welcome! ${name} Your generated password to access your account is: ${passcode}\nPlease log in and change it as soon as possible.`;
     // Save user to the database
-    await user.save();
+    const userStore = await user.save();
+    io.emit("userAdded", userStore);
     sendEmail(email, "your passcode ", text, false);
     // Send a success response
     sendCreated(res, "User created successfully", user);
@@ -97,6 +100,8 @@ export const deleteUser = async (req, res) => {
     sendNotFound(res, "User not found");
   }
   if (user) {
+    const userId = user._id;
+    io.emit("userDeleted", userId);
     await user.deleteOne();
     sendDeleteSuccess(res, "User deleted successfully");
   } else {
@@ -108,7 +113,7 @@ export const deleteUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}).sort({ createdAt: -1 });
-
+io.emit("userFetched", users);
     if (!users || users.length === 0) {
       return sendNotFound(res, "No users found");
     } else {

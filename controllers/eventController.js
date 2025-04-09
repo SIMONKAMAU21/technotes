@@ -16,7 +16,6 @@ export const addEvent = async (req, res) => {
     if (eventExists) {
       return sendBadRequest(res, "Event already exists");
     }
-
     // Create a new event
     const newEvent = new Event({
       title,
@@ -45,21 +44,22 @@ export const getAllEvents = async (req, res) => {
       return res.status(200).json(event);
     }
   } catch (error) {
-    return res.status(500).json({ message: "Server error" });
+    return sendServerError(res, "Server error");
   }
 };
 
 export const deleteEvent = async (req, res) => {
   const event = await Event.findById(req.params.id);
   if (!event) {
-  return sendNotFound(res, "event not found");
+    return sendNotFound(res, "event not found");
   }
   if (event) {
-    await event.deleteOne();
-    io.emit("eventDeleted", { eventId: req.params.id });
+    const eventId = event._id;
+    const deletedEvent = await event.deleteOne();
+    io.emit("eventDeleted",eventId);
     sendDeleteSuccess(res, "event deleted successfully");
   } else {
-    return res.status(500).json({ message: "Server error" });
+    return sendServerError(res, "Server Error");
   }
 };
 
@@ -88,6 +88,6 @@ export const updateEvent = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    return sendServerError(res, "Server error");
   }
 };
