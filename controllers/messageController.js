@@ -1,95 +1,207 @@
-import { hashPassword, sendBadRequest, sendCreated, sendDeleteSuccess, sendNotFound, sendServerError } from "../helpers/helperFunctions.js";
+import {
+  hashPassword,
+  sendBadRequest,
+  sendCreated,
+  sendDeleteSuccess,
+  sendNotFound,
+  sendServerError,
+} from "../helpers/helperFunctions.js";
+import { io } from "../index.js";
 import Message from "../model/messageModal.js";
 import User from "../model/userModal.js";
+import mongoose, { Types } from "mongoose";
 
 export const addMessage = async (req, res) => {
-    const { senderId, receiverId, content, timestamp } =
-        req.body;
-    try {
-        const senderExists = await User.findOne({ _id: senderId }).lean().exec();
-        if (!senderExists) {
-            return sendBadRequest(res, "sender does not exists");
-        }
-        const recieverExists = await User.findOne({ _id: receiverId }).lean().exec();
-        if (!recieverExists) {
-            return sendBadRequest(res, "reciver does not exists");
-        }
-       
-        const newMessage = new Message({
-            senderId,
-            receiverId,
-            content,
-            timestamp,
-        });
+  const { senderId, receiverId, content } = req.body;
 
-        // Save Message to the database
-        await newMessage.save();
+  try {
+    const senderExists = await User.findById(senderId).lean().exec();
+    const receiverExists = await User.findById(receiverId).lean().exec();
 
-        sendCreated(res, `message sent to ${receiverId} successfully`, newMessage);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
+    if (!senderExists || !receiverExists) {
+      return sendBadRequest(res, "Sender or Receiver does not exist");
     }
+
+    const conversationId = [senderId, receiverId].sort().join("_");
+
+    const newMessage = new Message({
+      senderId,
+      receiverId,
+      content,
+      conversationId,
+      timestamp: new Date(),
+      read: false,
+    });
+
+    await newMessage.save();
+
+    io.emit("messageAdded", newMessage);
+    sendCreated(res, `Message sent to ${receiverId} successfully`, newMessage);
+  } catch (error) {
+    console.error("Error sending message:", error);
+    sendServerError(res, "Server error");
+  }
 };
-
-
 
 export const deleteMessage = async (req, res) => {
-    const message = await Message.findById(req.params.id);
-    if (!message) {
-        sendNotFound(res, "Message not found");
-    }
-    if (message) {
-        await message.deleteOne();
-        sendDeleteSuccess(res, "Message deleted succefully");
-    } else {
-        res.status(500).json({ message: "Server error" });
-    }
+  const message = await Message.findById(req.params.id);
+  if (!message) {
+    sendNotFound(res, "Message not found");
+  }
+  if (message) {
+    const messageId = message._id;
+    await message.deleteOne();
+    io.emit("messageDeleted", messageId);
+    sendDeleteSuccess(res, "Message deleted succefully");
+  } else {
+    res.status(500).json({ message: "Server error" });
+  }
 };
-
 
 export const getAllMessages = async (req, res) => {
-    try {
-        const messages = await Message.find({}).populate('senderId','name').populate('receiverId','name').sort({ name: -1 });
-
-        if (!messages || messages.length === 0) {
-            return sendNotFound(res, "No Messages found");
-        } else {
-            return res.status(200).json(messages);
-        }
-    } catch (error) {
-        console.log('error', error)
-        return res.status(500).json({ message: "Server error" });
+  try {
+    const messages = await Message.find({})
+      .populate("senderId", "name")
+      .populate("receiverId", "name")
+      .sort({ name: -1 });
+    io.emit("messageFetched", messages);
+    if (!messages || messages.length === 0) {
+      return sendNotFound(res, "No Messages found");
+    } else {
+      return res.status(200).json(messages);
     }
+  } catch (error) {
+    console.log("error", error);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
-
 export const getMessageById = async (req, res) => {
-    try {
-        const messages = await Message.findById(req.params.id).populate('senderId','name').populate('receiverId','name')
-        if (messages) {
-            res.status(200).send(messages)
-        } else {
-            sendNotFound(res, "no Message with the id is found")
-        }
-    } catch (error) {
-        res.status(500).json({ message: "Server error" });
+  try {
+    const messages = await Message.findById(req.params.id)
+      .populate("senderId", "name")
+      .populate("receiverId", "name");
+    if (messages) {
+      res.status(200).send(messages);
+    } else {
+      sendNotFound(res, "no Message with the id is found");
     }
-}
-
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 export const getMessageBySenderId = async (req, res) => {
-    try {
-        const messages = await Message.find({senderId: req.params.senderId,receiverId:req.params.receiverId}).lean().exec()
-        if (messages.length > 0) {
-            res.status(200).send(messages)
-        } else {
-            sendNotFound(res, "no Message found for the provided receiver id or receiver id")
-        }
-    } catch (error) {
-        console.log('error', error)
-        res.status(500).json({ message: "Server error" });
+  try {
+    const messages = await Message.find({
+      senderId: req.params.id,
+      receiverId: req.params.id,
+    });
+    console.log("req.params.senderId", req.params.senderId);
+    console.log("messages", messages);
+    io.emit("messageFetched", messages);
+    if (messages.length > 0) {
+      res.status(200).send(messages);
+    } else {
+      sendNotFound(
+        res,
+        "no Message found for the provided receiver id or sender id"
+      );
     }
-}
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
+export const getConversationBetweenUsers = async (req, res) => {
+  const { userAId, userBId } = req.params;
 
+  try {
+    const conversationId = [userAId, userBId].sort().join("_");
+
+    const messages = await Message.find({ conversationId, deleted: false })
+      .sort({ timestamp: 1 }) // Oldest first
+      .populate("senderId", "name")
+      .populate("receiverId", "name");
+
+    if (!messages.length) {
+      return sendNotFound(res, "No conversation found");
+    }
+
+    io.emit("conversationFetched", messages);
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error("Error fetching conversation:", error);
+    sendServerError(res, "Server error");
+  }
+};
+
+export const getUserConversations = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const conversations = await Message.aggregate([
+      {
+        $match: {
+          $or: [
+            { senderId: new Types.ObjectId(userId) },
+            { receiverId: new Types.ObjectId(userId) },
+          ],
+          deleted: { $ne: true },
+        },
+      },
+      { $sort: { timestamp: -1 } },
+      {
+        $group: {
+          _id: "$conversationId",
+          lastMessage: { $first: "$$ROOT" },
+        },
+      },
+      { $sort: { "lastMessage.timestamp": -1 } },
+    ]);
+
+    // Manual population of sender and receiver
+    const populated = await Promise.all(
+      conversations.map(async (conversation) => {
+        const sender = await User.findById(
+          conversation.lastMessage.senderId
+        ).select("name");
+        const receiver = await User.findById(
+          conversation.lastMessage.receiverId
+        ).select("name");
+        return {
+          ...conversation,
+          lastMessage: {
+            ...conversation.lastMessage,
+            senderId: sender,
+            receiverId: receiver,
+          },
+        };
+      })
+    );
+    res.status(200).json(populated);
+  } catch (error) {
+    console.error("Error getting user conversations:", error);
+    sendServerError(res, "Server error");
+  }
+};
+
+export const getMessagesInConversation = async (req, res) => {
+  const { conversationId } = req.params;
+
+  try {
+    const messages = await Message.find({ conversationId })
+      .sort({ timestamp: 1 }) // Oldest first
+      .populate("senderId", "name")
+      .populate("receiverId", "name");
+    if (!messages.length) {
+      return sendNotFound(res, "No messages found in this conversation");
+    }
+
+    return res.status(200).json(messages);
+  } catch (error) {
+    console.error("Error fetching conversation:", error);
+    return sendServerError(res, "Server error");
+  }
+};
