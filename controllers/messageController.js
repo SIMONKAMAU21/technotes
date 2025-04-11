@@ -166,10 +166,10 @@ export const getUserConversations = async (req, res) => {
       conversations.map(async (conversation) => {
         const sender = await User.findById(
           conversation.lastMessage.senderId
-        ).select("name");
+        ).select("name photo");
         const receiver = await User.findById(
           conversation.lastMessage.receiverId
-        ).select("name");
+        ).select("name photo");
         return {
           ...conversation,
           lastMessage: {
@@ -180,6 +180,7 @@ export const getUserConversations = async (req, res) => {
         };
       })
     );
+    io.emit("userConversationsFetched", populated);
     res.status(200).json(populated);
   } catch (error) {
     console.error("Error getting user conversations:", error);
@@ -193,12 +194,12 @@ export const getMessagesInConversation = async (req, res) => {
   try {
     const messages = await Message.find({ conversationId })
       .sort({ timestamp: 1 }) // Oldest first
-      .populate("senderId", "name")
-      .populate("receiverId", "name");
+      .populate("senderId", "name", )
+      .populate("receiverId", "name",);
     if (!messages.length) {
       return sendNotFound(res, "No messages found in this conversation");
     }
-
+io.emit("messagesInConversationFetched", messages);
     return res.status(200).json(messages);
   } catch (error) {
     console.error("Error fetching conversation:", error);
