@@ -91,29 +91,6 @@ export const getMessageById = async (req, res) => {
   }
 };
 
-export const getMessageBySenderId = async (req, res) => {
-  try {
-    const messages = await Message.find({
-      senderId: req.params.id,
-      receiverId: req.params.id,
-    });
-    console.log("req.params.senderId", req.params.senderId);
-    console.log("messages", messages);
-    io.emit("messageFetched", messages);
-    if (messages.length > 0) {
-      res.status(200).send(messages);
-    } else {
-      sendNotFound(
-        res,
-        "no Message found for the provided receiver id or sender id"
-      );
-    }
-  } catch (error) {
-    console.log("error", error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
 export const getConversationBetweenUsers = async (req, res) => {
   const { userAId, userBId } = req.params;
 
@@ -188,18 +165,43 @@ export const getUserConversations = async (req, res) => {
   }
 };
 
+export const deleteUserConversations = async (req, res) => {
+  try {
+    const { userId, conversationId } = req.params;
+    // console.log("userId", userId);
+    // console.log("conversationId", conversationId);
+    const result = await Message.updateMany(
+      { conversationId },
+      { $addToSet: { deletedBy: userId },deleted:true }
+    );
+    // console.log("result", result);
+    if (result.modifiedCount > 0) {
+      io.emit("userConversationsDeleted", {conversationId});
+      return sendDeleteSuccess(res, "Conversations deleted successfully");
+    } else {
+      return sendNotFound(
+        res,
+        "No conversations found for the given user ID and conversation ID"
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    return sendServerError(res, "Server error");
+  }
+};
+
 export const getMessagesInConversation = async (req, res) => {
   const { conversationId } = req.params;
 
   try {
     const messages = await Message.find({ conversationId })
       .sort({ timestamp: 1 }) // Oldest first
-      .populate("senderId", "name", )
-      .populate("receiverId", "name",);
+      .populate("senderId", "name")
+      .populate("receiverId", "name");
     if (!messages.length) {
       return sendNotFound(res, "No messages found in this conversation");
     }
-io.emit("messagesInConversationFetched", messages);
+    io.emit("messagesInConversationFetched", messages);
     return res.status(200).json(messages);
   } catch (error) {
     console.error("Error fetching conversation:", error);

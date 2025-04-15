@@ -8,6 +8,7 @@ const messageSchema = new mongoose.Schema({
   conversationId: { type: String, required: true },
   read: { type: Boolean, default: false },
   deleted: { type: Boolean, default: false },
+  deletedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
 const Message = mongoose.model('Message', messageSchema);
