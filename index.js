@@ -14,6 +14,7 @@ import messageRouter from "./api/messageRoutes.js";
 import eventRouter from "./api/eventRoutes.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { errorHandler } from "./middleware/error.js";
 dotenv.config();
 connectDb().catch(console.dir);
 
@@ -55,10 +56,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-
 // Base health check route
 app.get("/", (req, res) => {
-  res.redirect(`https://simon-kamau.vercel.app/`);
+  throw new Error("Error in the server");
+  res.status(200).json({ message: "Server is running" });
+  // res.redirect(`https://simon-kamau.vercel.app/`);
 });
 
 // Route imports
@@ -72,6 +74,7 @@ app.use("/api", gradeRouter);
 app.use("/api", messageRouter);
 app.use("/api", eventRouter);
 
+app.use(errorHandler)
 // Server configuration
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

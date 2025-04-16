@@ -5,11 +5,11 @@ import { addClass, deleteClass, getAllClasses, getClassByTeacher, updateClass } 
 
 const classRouter =Router();
 
-classRouter.post('/class/add', addClass);
-classRouter.get('/class/teacher/:id',getClassByTeacher);
-classRouter.delete('/class/:id',deleteClass);
-classRouter.get('/classes',getAllClasses);
-classRouter.put('/class/:id',updateClass);
+classRouter.post('/class/add',Auth,checkAdmin, addClass);
+classRouter.get('/class/teacher/:id',Auth,checkAdmin,getClassByTeacher);
+classRouter.delete('/class/:id',Auth,checkAdmin,deleteClass);
+classRouter.get('/classes',Auth,checkAdmin,getAllClasses);
+classRouter.put('/class/:id',Auth,checkAdmin,updateClass);
 
 // classRouter.get('/class/:id',getUserById)
 

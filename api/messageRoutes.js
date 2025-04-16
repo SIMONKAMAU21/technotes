@@ -1,18 +1,19 @@
 import {Router} from 'express';
 import { addMessage, deleteMessage, deleteUserConversations, getAllMessages, getConversationBetweenUsers, getMessageById,  getMessagesInConversation, getUserConversations } from '../controllers/messageController.js';
+import { Auth } from '../middleware/Auth.js';
 
 
 const messageRouter =Router();
 
-messageRouter.post('/message/add',addMessage);
-messageRouter.delete('/message/:id',deleteMessage);
-messageRouter.get('/messages',getAllMessages);
-messageRouter.get('/message/:id',getMessageById);
+messageRouter.post('/message/add',Auth, addMessage);
+messageRouter.delete('/message/:id',Auth,deleteMessage);
+messageRouter.get('/messages',Auth,getAllMessages);
+messageRouter.get('/message/:id',Auth,getMessageById);
 // messageRouter.get('/messages/:id',getMessageBySenderId);
-messageRouter.get("/messages/conversation/:userAId/:userBId", getConversationBetweenUsers);
-messageRouter.get("/messages/user/:userId/conversations", getUserConversations);
-messageRouter.get("/messages/conversation/:conversationId", getMessagesInConversation);
-messageRouter.patch("/messages/conversation/:userId/:conversationId", deleteUserConversations);
+messageRouter.get("/messages/conversation/:userAId/:userBId",Auth, getConversationBetweenUsers);
+messageRouter.get("/messages/user/:userId/conversations",Auth, getUserConversations);
+messageRouter.get("/messages/conversation/:conversationId", Auth,getMessagesInConversation);
+messageRouter.patch("/messages/conversation/:userId/:conversationId",Auth, deleteUserConversations);
 
 
 export default messageRouter;

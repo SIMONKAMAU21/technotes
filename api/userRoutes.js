@@ -14,7 +14,7 @@ userRouter.post('/user',getUserById);
 userRouter.put('/user/:id',Auth,checkAdmin,updateUser)
 userRouter.post('/create/conversation');
 userRouter.post('/user/password/:id',changePassword)
-userRouter.post('/user/:id/upload-photo',upload.single("photo"),uploadProfilePhoto)
+userRouter.post('/user/:id/upload-photo',upload.single("photo"),Auth,uploadProfilePhoto)
 
 
 
