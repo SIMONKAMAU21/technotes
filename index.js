@@ -58,9 +58,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 // Base health check route
 app.get("/", (req, res) => {
-  throw new Error("Error in the server");
-  res.status(200).json({ message: "Server is running" });
-  // res.redirect(`https://simon-kamau.vercel.app/`);
+  res.redirect(`https://simon-kamau.vercel.app/`);
 });
 
 // Route imports
