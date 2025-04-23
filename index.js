@@ -15,6 +15,12 @@ import eventRouter from "./api/eventRoutes.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { errorHandler } from "./middleware/error.js";
+import bodyParser from "body-parser";
+import morgan from "morgan";
+import fs from "fs"
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+
 dotenv.config();
 connectDb().catch(console.dir);
 
@@ -28,6 +34,10 @@ const io = new Server(server, {
     credentials: true,
   },
 });
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const logStream = fs.createWriteStream(path.join(__dirname,"access.log"),{flags:"a"})
+app.use(morgan('combined',{stream:logStream}))
+
 
 io.on("connection", (socket) => {
   // console.log("connected", socket.connected);
@@ -53,6 +63,7 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
+
 
 app.use(cors(corsOptions));
 app.use(express.json());
