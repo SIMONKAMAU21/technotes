@@ -19,7 +19,6 @@ import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const logStream = fs.createWriteStream(path.join(__dirname,"access.log"),{flags:"a"})
 app.use(morgan('dev',{stream:logStream}))
