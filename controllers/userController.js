@@ -12,8 +12,8 @@ import bcrypt from "bcryptjs";
 import { sendEmail } from "../middleware/mailer.js";
 import crypto from "crypto";
 import Student from "../model/studentModal.js";
-import { io } from "../index.js";
-import { Socket } from "socket.io";
+import { io } from "../lib/socket.js";
+
 //CRUD
 export const addUser = async (req, res) => {
   const { name, email, role, phone, address, gender } = req.body;

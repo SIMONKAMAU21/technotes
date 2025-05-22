@@ -6,7 +6,7 @@ import {
   sendNotFound,
   sendServerError,
 } from "../helpers/helperFunctions.js";
-import { io } from "../index.js";
+import { io } from "../lib/socket.js";
 import Message from "../model/messageModal.js";
 import User from "../model/userModal.js";
 import mongoose, { Types } from "mongoose";
@@ -35,7 +35,7 @@ export const addMessage = async (req, res) => {
 
     await newMessage.save();
 
-    io.emit("messageAdded", newMessage);
+    io.to(conversationId).emit("messageAdded", newMessage);
     sendCreated(res, `Message sent to ${receiverId} successfully`, newMessage);
   } catch (error) {
     console.error("Error sending message:", error);
@@ -157,7 +157,7 @@ export const getUserConversations = async (req, res) => {
         };
       })
     );
-    io.emit("userConversationsFetched", populated);
+    io.to(userId).emit("userConversationsFetched", populated);
     res.status(200).json(populated);
   } catch (error) {
     console.error("Error getting user conversations:", error);
@@ -192,7 +192,6 @@ export const deleteUserConversations = async (req, res) => {
 
 export const getMessagesInConversation = async (req, res) => {
   const { conversationId } = req.params;
-
   try {
     const messages = await Message.find({ conversationId })
       .sort({ timestamp: 1 }) // Oldest first
@@ -201,7 +200,7 @@ export const getMessagesInConversation = async (req, res) => {
     if (!messages.length) {
       return sendNotFound(res, "No messages found in this conversation");
     }
-    io.emit("messagesInConversationFetched", messages);
+    io.to(conversationId).emit("messagesInConversationFetched", messages);
     return res.status(200).json(messages);
   } catch (error) {
     console.error("Error fetching conversation:", error);

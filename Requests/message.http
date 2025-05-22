@@ -2,8 +2,7 @@
 GET http://localhost:8000/
 ###
 GET http://localhost:8000/api/messages
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGM0N2M4Y2FlZTI1Mzc0N2UwNmExNSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTczMjI4MjA2MywiZXhwIjoxNzMyMjg5MjYzfQ.PypO9T8ifSmkKo4zazK5mvSYW2EzI1Xhotd0APr2nj0
-
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmRiMzRhNjk3MjQyZGViNzMwOGRhOSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJwZW5pbmFoIG11cmluZ2kiLCJpYXQiOjE3NDczMjE2NjIsImV4cCI6MTc0NzMyMTY2Mn0.UByaqm1vNdPouTzrEyvuJc_ntCM5JvAsh5mD7E-Eui8
 ### registering a user 
 POST http://localhost:8000/api/message/add
 Content-Type: application/json

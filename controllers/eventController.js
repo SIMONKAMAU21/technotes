@@ -5,7 +5,7 @@ import {
   sendNotFound,
   sendServerError,
 } from "../helpers/helperFunctions.js";
-import { io } from "../index.js";
+import { io } from "../lib/socket.js";
 import Event from "../model/eventModal.js";
 
 export const addEvent = async (req, res) => {
