@@ -404,3 +404,14 @@
 [0mGET /api/messages/conversation/676db34a697242deb7308da9_67fc05c561784cddfc09bc52 [32m200[0m 406.517 ms - 2488[0m
 [0mPOST /api/message/add [32m201[0m 608.940 ms - 67[0m
 [0mGET /api/messages/conversation/676db34a697242deb7308da9_6826043fba4d137165a05584 [32m200[0m 489.203 ms - 11244[0m
+[0mGET /api/users [32m200[0m 236.757 ms - 5345[0m
+[0mGET /api/users [33m401[0m 6.420 ms - 44[0m
+[0mPOST /api/users/login [32m200[0m 307.371 ms - 476[0m
+[0mGET /api/users [32m200[0m 218.004 ms - 5345[0m
+[0mPOST /api/users/login [32m200[0m 439.167 ms - 476[0m
+[0mPOST /api/users/login [33m400[0m 292.489 ms - 33[0m
+[0mPOST /api/users/login [33m400[0m 394.798 ms - 33[0m
+[0mPOST /api/users/login [32m200[0m 305.496 ms - 476[0m
+[0mPOST /api/users/login [32m200[0m 326.274 ms - 476[0m
+[0mPOST /api/users/login [32m200[0m 708.199 ms - 517[0m
+[0mPOST /api/users/login [32m200[0m 450.550 ms - 533[0m

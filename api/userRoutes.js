@@ -9,7 +9,7 @@ const userRouter =Router();
 userRouter.post('/users/add',Auth,checkAdmin, addUser);
 userRouter.post('/users/login',login);
 userRouter.delete('/users/:id',Auth,checkAdmin,deleteUser);
-userRouter.get('/users',Auth,checkAdmin,getAllUsers);
+userRouter.get('/users',Auth,getAllUsers);
 userRouter.post('/user',getUserById);
 userRouter.put('/user/:id',Auth,checkAdmin,updateUser)
 userRouter.post('/create/conversation');
