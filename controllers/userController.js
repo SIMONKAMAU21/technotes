@@ -23,9 +23,9 @@ export const addUser = async (req, res) => {
     if (userExists) {
       return sendBadRequest(res, "User already exists");
     }
-    const passcode = crypto.randomBytes(4).toString("hex");
+    const passcode = Math.floor(1000 + Math.random() * 900000).toString();
     const hashedPassword = await hashPassword(passcode);
-
+    const loginUrl = `https://technote-client.vercel.app/`;
     const user = new User({
       name,
       email,
@@ -35,11 +35,31 @@ export const addUser = async (req, res) => {
       address,
       gender,
     });
-    const text = `Welcome! ${name} Your generated password to access your account is: ${passcode}\nPlease log in and change it as soon as possible.`;
+    const text = `
+  <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+    <h2 style="color: #4CAF50;">Welcome, ${name}!</h2>
+    <p>We are pleased to inform you that you have been successfully registered.</p>
+
+    <div style="background-color: #f9f9f9; padding: 10px; border-radius: 5px; margin: 20px 0;">
+      <h3 style="color: #333;">Your Credentials:</h3>
+      <p><strong>Email:</strong> <span style="color:rgb(76, 175, 80); font-weight: bold;">${email}</span></p>
+      <p><strong>Password:</strong> <span style="color: rgb(76, 175, 80); font-weight: bold;">${passcode}</span></p>
+      <p style="color: #d9534f; font-size: 14px;">Please log in and change your password as soon as possible.</p>
+    </div>
+
+    <a href="${loginUrl}" style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Login Now</a>
+
+    <p style="margin-top: 20px;">If you have any questions, feel free to contact us.</p>
+
+    <hr style="border: 1px solid #ddd;">
+    <p style="font-size: 14px; color: #666;">Best Regards, <br><strong>School Admin</strong></p>
+  </div>
+`;
+
     // Save user to the database
     const userStore = await user.save();
     io.emit("userAdded", userStore);
-    sendEmail(email, "your passcode ", text, false);
+    sendEmail(email, "your passcode ", text, true);
     // Send a success response
     sendCreated(res, "User created successfully", user);
   } catch (error) {
@@ -116,7 +136,7 @@ export const deleteUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}).sort({ createdAt: -1 });
-io.emit("userFetched", users);
+    io.emit("userFetched", users);
     if (!users || users.length === 0) {
       return sendNotFound(res, "No users found");
     } else {
