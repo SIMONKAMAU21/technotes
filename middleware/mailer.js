@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { sendSuccess } from "../helpers/helperFunctions";
 
 export const sendEmail = async (email, subject,content,isHtml = false) => {
   const ownEmail = process.env.EMAIL;
@@ -21,7 +22,10 @@ export const sendEmail = async (email, subject,content,isHtml = false) => {
     if (error) {
       console.log(error);
     } else {
-      console.log("Email sent: " + info.response);
+      return sendSuccess(
+        `Email sent to ${email} successfully`,
+        info.response
+      );
     }
   });
 };

@@ -157,6 +157,7 @@ export const getUserConversations = async (req, res) => {
         };
       })
     );
+    // console.log('populated', {...populated , userId})
     io.to(userId).emit("userConversationsFetched", populated);
     res.status(200).json(populated);
   } catch (error) {
