@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { sendSuccess } from "../helpers/helperFunctions";
+import { sendSuccess } from "../helpers/helperFunctions.js";
 
 export const sendEmail = async (email, subject,content,isHtml = false) => {
   const ownEmail = process.env.EMAIL;
